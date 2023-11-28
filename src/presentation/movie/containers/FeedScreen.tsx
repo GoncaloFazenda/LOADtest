@@ -1,10 +1,15 @@
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import React from 'react';
+import generalStyles from '../../general/generalStyles';
 
-export default function FeedScreen() {
+type Props = {
+  onPressViewDetails: () => void;
+};
+
+export default function FeedScreen(props: Props) {
   return (
-    <View>
-      <Text>feedScreen</Text>
+    <View style={generalStyles.screen}>
+      <Button title="View Details" onPress={props.onPressViewDetails} />
     </View>
   );
 }
