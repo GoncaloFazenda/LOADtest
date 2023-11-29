@@ -1,6 +1,6 @@
 import {ApiResponse, ApisauceInstance, create} from 'apisauce';
 import {TMDB_BASE_URL, TMDB_TOKEN} from '../utils/utils';
-import Movie, {Movies} from './entities/Movie';
+import {Movies} from './entities/Movie';
 import PopularMoviesResponse from './responses/PopularMovies';
 
 export default class ApiBase {
