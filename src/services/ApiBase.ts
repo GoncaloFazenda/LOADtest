@@ -1,8 +1,10 @@
 import {ApiResponse, ApisauceInstance, create} from 'apisauce';
 import {TMDB_BASE_URL, TMDB_TOKEN} from '../utils/utils';
 import {Movies} from './entities/Movie';
-import PopularMoviesResponse from './responses/PopularMovies';
+import PopularMoviesResponse from './responses/PopularMoviesResponse';
+import FailedRequestResponse from './responses/FailedRequestResponse';
 
+type ErrorResponse = {error: {code: string; message: string}};
 export default class ApiBase {
   private static instance: ApiBase;
 
@@ -28,9 +30,21 @@ export default class ApiBase {
     return this.instance;
   }
 
-  public getAllMovies = async (): Promise<Movies> => {
-    const resp = await this.api.get('/movie/popular?language=en-US&page=1');
-    const data = resp.data as PopularMoviesResponse;
-    return data.results;
+  private parseResponse<T>(response: ApiResponse<T> & ApiResponse<ErrorResponse>) {
+    if (response && response.ok) {
+      return response.data as T;
+    } else {
+      if (response && response.data && response.data.error && response.data.error.code) {
+        throw new FailedRequestResponse(response.data.error.code, response.data.error.message);
+      } else if (response.problem === 'NETWORK_ERROR' || response.problem === 'TIMEOUT_ERROR') {
+        throw new FailedRequestResponse('NETWORK_ERROR', "Can't reach the server. Please check your network settings");
+      } else {
+        throw new FailedRequestResponse('GENERAL_ERROR', 'Oops, something went wrong');
+      }
+    }
+  }
+
+  public getAllMovies = async () => {
+    return this.parseResponse<PopularMoviesResponse>(await this.api.get('/movie/popular?language=en-US&page=1'));
   };
 }

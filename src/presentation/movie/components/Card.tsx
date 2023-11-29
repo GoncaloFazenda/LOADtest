@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 2},
     shadowOpacity: 3,
     width: 200,
-    height: 320,
+    height: 315,
     marginHorizontal: 12,
   },
   poster: {

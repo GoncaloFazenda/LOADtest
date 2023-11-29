@@ -1,8 +1,8 @@
-import Movie from '../entities/Movie';
+import {Movies} from '../entities/Movie';
 
 type PopularMoviesResponse = {
   page: number;
-  results: Movie[];
+  results: Movies;
   total_pages: number;
   total_results: number;
 };
