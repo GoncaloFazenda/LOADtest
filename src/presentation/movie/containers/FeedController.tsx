@@ -12,20 +12,30 @@ type Props = {
 export default function FeedController(props: Props) {
   const [movies, setMovies] = useState<Movies>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   function onPressViewDetails(movieData: Movie) {
     props.navigation.navigate('Movie Details', {movieData});
   }
 
   async function getAllMovies() {
+    setIsLoading(true);
     let response = await getAllMoviesThunk();
-    if (response.movies && response.movies.results) return setMovies(response.movies.results);
-    else if (response.error) return setErrorMessage(response.error.message);
+    if (response.movies && response.movies.results) setMovies(response.movies.results);
+    else if (response.error) setErrorMessage(response.error.message);
+    setIsLoading(false);
   }
 
   useEffect(() => {
     getAllMovies();
   }, []);
 
-  return <FeedScreen movies={movies} onPressViewDetails={movie => onPressViewDetails(movie)} errorMessage={errorMessage} />;
+  return (
+    <FeedScreen
+      movies={movies}
+      onPressViewDetails={movie => onPressViewDetails(movie)}
+      errorMessage={errorMessage}
+      isLoading={isLoading}
+    />
+  );
 }

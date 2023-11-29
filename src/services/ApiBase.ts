@@ -3,6 +3,7 @@ import {TMDB_BASE_URL, TMDB_TOKEN} from '../utils/utils';
 import {Movies} from './entities/Movie';
 import PopularMoviesResponse from './responses/PopularMoviesResponse';
 import FailedRequestResponse from './responses/FailedRequestResponse';
+import GenreResponse from './responses/GenreResponse';
 
 type ErrorResponse = {error: {code: string; message: string}};
 export default class ApiBase {
@@ -46,5 +47,9 @@ export default class ApiBase {
 
   public getAllMovies = async () => {
     return this.parseResponse<PopularMoviesResponse>(await this.api.get('/movie/popular?language=en-US&page=1'));
+  };
+
+  public getGenreById = async (id: number) => {
+    return this.parseResponse<GenreResponse>(await this.api.get(`/genre/${id}`));
   };
 }
