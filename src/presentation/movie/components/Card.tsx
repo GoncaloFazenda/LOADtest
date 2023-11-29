@@ -1,26 +1,43 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
-import React from 'react';
+import {View, Text, StyleSheet, Image, TouchableHighlight} from 'react-native';
+import React, {useState} from 'react';
 import {TMDB_IMG_BASE_URL} from '../../../utils/utils';
 
 type Props = {
   date: string;
   title: string;
   imageUri: string;
+  onPress: () => void;
 };
 
 export default function Card(props: Props) {
+  const [isPressed, setIsPressed] = useState<Boolean>(false);
+
+  const handlePressIn = () => {
+    setIsPressed(true);
+  };
+
+  const handlePressOut = () => {
+    setIsPressed(false);
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.releaseDateContainer}>
-        <Text style={styles.releaseDate}>{props.date}</Text>
-      </View>
-      <Image source={{uri: props.imageUri}} style={styles.poster} resizeMode="stretch" />
-      <View style={styles.titleContainer}>
-        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
-          {props.title}
-        </Text>
-      </View>
-    </View>
+    <TouchableHighlight
+      onPress={props.onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={[styles.container, isPressed && {...styles.container, opacity: 0.9}]}>
+      <>
+        <View style={styles.releaseDateContainer}>
+          <Text style={styles.releaseDate}>{props.date}</Text>
+        </View>
+        <Image source={{uri: props.imageUri}} style={styles.poster} resizeMode="stretch" />
+        <View style={styles.titleContainer}>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+            {props.title}
+          </Text>
+        </View>
+      </>
+    </TouchableHighlight>
   );
 }
 
@@ -34,6 +51,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 3,
     width: 200,
     height: 320,
+    marginHorizontal: 12,
   },
   poster: {
     height: 260,

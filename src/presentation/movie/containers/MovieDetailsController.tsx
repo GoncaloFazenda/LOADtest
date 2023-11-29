@@ -10,12 +10,8 @@ type Props = {
 
 export default function MovieDetailsController(props: Props) {
   const {movieData} = props.route.params as {movieData: Movie};
-  console.log('akiiii id:   ', movieData.id);
+  // console.log('akiiii id:   ', movieData.id);
 
-  useEffect(() => {
-    // props.navigation.setOptions({
-    //   title: movieData.title,
-    // });
-  }, []);
+  useEffect(() => {}, []);
   return <MovieDetailsScreen />;
 }
